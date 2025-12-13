@@ -1,0 +1,206 @@
+<!DOCTYPE html><html lang="he" dir="rtl"><head>
+  <meta charset="utf-8">
+  <title></title>
+  <base href="/ng-portals/rb/he/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <script type="text/javascript">
+    //    for iPad
+    window.onpageshow = function (e) {
+      if (e.persisted) {
+        window.location.reload();
+      }
+    };
+
+    (function () {
+      function handleVisibilityChange() {
+        if (!document.hidden) {
+          var sessionStorageKey = 'App_sessionlosttime';
+          var sessionLostTime = sessionStorage && sessionStorage.getItem(sessionStorageKey);
+
+          if (sessionLostTime) {
+            sessionLostTime = parseInt(sessionLostTime);
+            if (new Date().getTime() >= sessionLostTime) {
+              sessionStorage.removeItem(sessionStorageKey);
+              window.location.reload();
+            }
+          }
+        }
+      }
+
+      function isMobile() {
+        var userAgent = navigator.userAgent.toLowerCase();
+        return !!(
+          userAgent.match(/android/i)
+          || userAgent.match(/iphone/i)
+          || userAgent.match(/ipad/i)
+          || userAgent.match(/ipod/i)
+          || userAgent.match(/windows phone/i)
+        );
+      }
+
+      if (isMobile()) {
+        document.addEventListener('visibilitychange', function () {
+          try {
+            handleVisibilityChange();
+          } catch (e) {
+          }
+        }, false);
+      }
+
+    })();
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      bnhpApp.pwaBanner = e;
+    });
+  </script>
+<link rel="stylesheet" href="styles.7702b6c7dd3ef046.css"><link rel="preload" href="Poalim2023-Bold.b8385e72d902dd04.woff2" as="font" crossorigin="anonymous"><link rel="preload" href="Poalim2023-Light.207a4722a8e0b08d.woff2" as="font" crossorigin="anonymous"><link rel="preload" href="Poalim2023-Regular.312a498fa547ee2f.woff2" as="font" crossorigin="anonymous"><link rel="preload" href="bg.076020443b94d224.jpg" as="image"><link rel="preload" href="kite-icons.22b834f09b57f004.woff2" as="font" crossorigin="anonymous"><link rel="preload" href="poalim-bold.afaa78f0219b396c.woff2" as="font" crossorigin="anonymous"><link rel="preload" href="poalim-light.94c40d09d3a944c7.woff2" as="font" crossorigin="anonymous"><link rel="preload" href="poalim-regular.46327a7442c79f9e.woff2" as="font" crossorigin="anonymous"><link rel="preload" href="poalimsans-medium-webfont_new.67327ee7a94acf21.woff2" as="font" crossorigin="anonymous"><script id="_cls_detector" data-clsconfig="reportURI=https://static2.bankhapoalim.co.il/glassbox/reporting/3c008717-1f85-196c-4bab-49dbce03e373/cls_report;recordErrors=true;recordScrolls=true;recordMouseMoves=true;iframesAutoInject=true;externalIdAttr=data-cc;useNameInFormSelectors=true;maskBlacklistValueByClass=do-not-store;ajaxRecordMetadata=always;ajaxRecordResponseHeaders=always;ajaxRecordResponseBody=and(tld,statusgte(400))" src="/ng-portals/lib/clarisite/detector-dom.min.js?v=68.39.18b"></script><script data-dtconfig="app=48cfc167f13f6415|auto=1|featureHash=ICA2QSVfghjqrtux|msl=153600|vcv=2|reportUrl=/dynaagent/rb_fe6e6d1c-9c44-4033-b023-a21c38d82255|rdnt=1|uxrgce=1|bp=3|cuc=86navorh|dpvc=1|md=mdcc1=apoalim-server-error-messages ^rb poalim-error-messages ^rb ul ^rb li ^rb div ^rb p|lastModification=1600347642902|dtVersion=10205201116183137|tp=500,50,0,1|uxdcw=1500|tal=3|featureHash=ICA2QSVfghjqrtux|dtVersion=10205201116183137|auto=1" src="/ng-portals/ruxitagentjs_ICA2SVfgjqrtux_10219210719121502.js?v=68.39.18b"></script><script src="https://www.bcodes.co.il/api.js?v=68.39.18b"></script><script defer="">
+            !function(t,e,n,r,o){
+              var a,i;var c=new XMLHttpRequest;c.addEventListener("load",(function(){try{var t="string"==typeof this.response?JSON.parse(this.response):this.response;if(!t.data)throw new Error;var n=t.data.cdn;a=n,i=t.data;var r=e.createElement("script");r.async=!0,r.src="".concat(a,"/interactbot.js"),r.type="text/javascript",e.getElementsByTagName("head")[0].appendChild(r)}catch(t){throw new Error("Coognitive: failed to retrieve metadata")}})),c.open("GET","".concat(r,"/api/v1/").concat(o,"/metadata"),!0),c.responseType="json",c.send();var u={on:{}};t[n]={init:function(t){return u.init=t},render:function(t){return u.render=t},reinit:function(){},open:function(){},close:function(){},toggle:function(){},destroy:function(){},on:function(t,e){t&&"function"==typeof e&&(Array.isArray(u.on[t])||(u.on[t]=[]),u.on[t].push(e))}},t.__interactbotLoaderReady__=function(e,r){r(a,i,o,u),t[n]=e}}
+            (window, document, "Interactbot", "/widget", "603f7a52d31a7500486f9ab6");
+            
+            function getChatbotPosition(el) {
+                const position = el.getBoundingClientRect();
+                return {
+                  x: position.left,
+                  y: position.top
+                };
+            }
+            
+            function dragChatbot() {
+                document.body.classList.add('body');
+                let style = document.createElement('style');
+                style.textContent = '.warp-chat { position: absolute; width: 78%; height: 100%; z-index: 999; }';             
+                let iframeParent = document.querySelector('.chat-iframe-parent');
+                let dragItem = Object.assign(document.createElement('div'), {className: 'warp-chat'});
+                let firstPosition = getChatbotPosition(dragItem);
+            
+                iframeParent.appendChild(dragItem);
+            
+                let container = document.querySelector('.body');
+                container.appendChild(style);
+            
+                let active = false, currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0, click;
+            
+                iframeParent.addEventListener('touchstart', dragStart, false);
+                iframeParent.addEventListener('touchend', dragEnd, false);
+                iframeParent.addEventListener('touchmove', drag, false);
+            
+                iframeParent.addEventListener('mousedown', dragStart, false);
+                iframeParent.addEventListener('mouseup', dragEnd, false);
+                document.addEventListener('mousemove', drag, false);
+            
+                Interactbot.on('open-chat', () => {
+                  dragItem.style.display = 'none';
+                });
+            
+                Interactbot.on('close-chat', () => {
+                  dragItem.style.display = 'block';
+                });
+            
+                function dragStart(e) {
+                  click = true;
+                  if (e.type === 'touchstart') {
+                    initialX = e.touches[0].clientX - xOffset;
+                    initialY = e.touches[0].clientY - yOffset;
+                  } else {
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+                  }
+            
+                  if (e.target === dragItem) {
+                    active = true;
+                  }
+                }
+            
+                function dragEnd(e) {
+                  if (click) {
+                    currentX = firstPosition.x;
+                    currentY = firstPosition.y;
+            
+                    xOffset = currentX;
+                    yOffset = currentY;
+            
+                    setTranslate(currentX, currentY, iframeParent);
+                    Interactbot.open();
+                  }
+                  initialX = currentX;
+                  initialY = currentY;
+                  active = false;
+                }
+            
+                function drag(e) {
+                  click = false;
+                  if (active) {
+                    e.preventDefault();
+            
+                    if (e.type === 'touchmove') {
+                      currentX = e.touches[0].clientX - initialX;
+                      currentY = e.touches[0].clientY - initialY;
+                    } else {
+                      currentX = e.clientX - initialX;
+                      currentY = e.clientY - initialY;
+                    }
+            
+                    xOffset = currentX;
+                    yOffset = currentY;
+            
+                    setTranslate(currentX, currentY, iframeParent);
+                  }
+                }
+            
+                function setTranslate(xPos, yPos, el) {
+                  el.style.transform = 'translate3d(' + xPos + 'px, ' + yPos + 'px, 0)';
+                }
+            }
+              
+            Interactbot.on('load', () => {
+                dragChatbot();
+            });
+            
+            </script></head>
+<body dir="rtl" class="allow-full-hd-resolution">
+<noscript>
+  <style>
+    #enable-js {
+      color: #c40019;
+      font-size: 44px;
+      font-family: Poalim-Arial;
+    }
+
+    .no-script-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+  <div class="no-script-wrapper">
+    <h2 id="enable-js">Please Enable JavaScript</h2>
+  </div>
+</noscript>
+<rb-root></rb-root>
+
+
+<script id="config-script">var bnhpApp = window.bnhpApp || {};
+            bnhpApp.portalName = "rb";
+            bnhpApp.baseHref = "/ng-portals/rb/he";
+            bnhpApp.direction = "rtl";
+            bnhpApp.language = "he";
+            bnhpApp.restContext = "/ServerServices";
+            bnhpApp.apiContext = "/bnhp-api";
+            bnhpApp.apiApigeePublicContext = "/apiServices";
+            bnhpApp.caFileUploadContext = "/ZhServices";
+            bnhpApp.ngContext = "/ng-portals";
+            bnhpApp.ng1Context = "/ng1-portals";
+            bnhpApp.bbContext = "/portalserver";
+            bnhpApp.embedSuffix = "-embed";
+            bnhpApp.keys = {"isNewForeignTransferServiceFlowEnabled":true,"isNewTransferServiceFlowEnabled":true,"isPdfDownloadRemainderPopup":true,"wellKnown":false,"defaultSessionTimeout":15,"showSearch":true,"supportResponsiveMobile":true,"showAccBalancesFooter":true,"showQuickLoansDynamicBanners":true,"systemMessageVersion":1,"accountsSelectVersion":2,"paymentsWaitingCounter":1,"google":true,"glassbox":true,"dynatrace":true,"creditKeys":{"showCiaReportAgreementsLink":true,"allowFileUploadOptionForLoan":true,"allowModelLogicCheckingFrameRequest":true,"allowModernization":false,"allowPopupReasonCancellation":true,"amortizationSchedule":true,"cancelPayoffVersion":2,"creditGuaranteesVersion":1,"deferOrSpreadLoanPayments":true,"delayPayoffLoansNewVersion":false,"digitalDocumentsPackageThreeVersion":true,"directLoanAuthNewVersion":false,"ellaLoanRequestVersion":2,"foreignCurrencyGuaranteesModernizationSwitch":true,"foreignCurrencyLoansModernizationSwitch":true,"guaranteesShekelPagination":false,"implementCreditLimitVersion":2,"immediateCreditLoanVersion":2,"isCarLoanFromIntro":false,"isLoanRequestAdvancedModel":true,"isUpdateFrameSso":true,"loansAndGuarantees":2,"loansAndGuarantiesModernizationSwitch":true,"loansStatusModernizationVersion":false,"maintenanceShutDown":false,"multichannelLoanAndCreditVersion":2,"multiChannelLoanChecklistEnabled":false,"multiChannelLoanGreenBright":2,"multiChannelLoanRequestVersion":2,"multiChannelLoanStatusFileSMSSwitch":true,"multiChannelLoanStatusVersion":2,"openEditDet":false,"openFlowableVersion":1,"openRemoveRecordBorrower":false,"payoffLoansVersion":2,"payoffLoansDetailsModernizationSwitch":true,"payoffLoansModernizationSwitch":true,"showCheckingFrameAgreement":true,"showCheckingFrameRequest":true,"showCheckingFrameStatus":true,"showCheckingFrameExistingFrame":true,"showCreditLoansForCar":true,"showForeignBankIncomeQueryActive":true,"showInterestCalcPostponement":true,"showInterestCalcPostponementWithoutDefVal":false,"showLoanLobbyProposalsPresentation":true,"showNewUserPopUp":false,"showPayoffBiz":false,"unauthorizedUserBiz":true,"showPayoffSmsDisclaimer":true,"loanRequestUseCalcDefaultValues":true,"loansLobbyVersion":2,"allowDelayLoanPayoff":false,"loansLobbyModernizationSwitch":true,"pdfCanvasEmbed":false,"deferOrSpreadLoanWarInterestRelief":true,"deferOrSpreadLoanWar3Month":true,"ciaCheckingFrame":true},"showCreditEnhancement":true,"draggableChatbot":true,"vibration":false,"showPrefixesBox":true,"showServiceBox":true,"showSizeBox":true,"showToolbarButtons":true,"meetingAppointmentVersion":2,"landingPageVer":2,"paymentsVersion":2,"gtmCodeVersion":1,"exportNavigation":{"email":false,"share":false},"showYoutube":true,"pwa":false,"creditCardActivationVersion":2,"creditCardOrderVersion":2,"creditCardOrdersVersion":1,"creditCardCodeRestorationVersion":2,"creditCardChangeDebitDateVersion":2,"creditCardCardTransactionsVersion":2,"creditCardCardTransactionsClickForDetails":false,"creditCardCancelAndOrder":2,"digitalDocsVersion":4,"isChatBotNavigation":true,"isTriggerChatFromHeader":true,"isTriggerChatFromStatusPage":true,"futureTransactionsVersion":2,"profileVersion":1,"mailsVersion":2,"cancelChecksVersion":2,"moneyTransferVersion":2,"unitTrustStandingVersion":1,"academicClubVersion":2,"studentClubVersion":2,"digitalGuarantees":false,"customerConsents":true,"showCardlessCashWitdrawalBiz":false,"showEarlyPayment":true,"foreignTradeTransferVersion":2,"foreignTradeOrdersStatusVersion":2,"foreignTradeBeneficiariesManagementVersion":2,"showTransferFilesUpload":true,"transactionsPerMonthVersion":2,"complaintVersion":1,"showIsracardCardLink":false,"showAmexCardLink":false,"immediateCreditLoanBizVersion":1,"multichannelLoanUpdateVersion":1.1,"strengthIdentityVersion":1,"showTransactionsExportFile":true,"showForeignCurrencyExportFile":true,"bulkNisTransfer":1,"digitalGuaranteesVersion":1,"pensionFundsVersion":3,"logoutVersion":2,"showSmartAdviseSettings":true,"annualTaxCertificateOrderVersion":1,"checkBookOrderVersion":2,"upSmartVersion":1,"accountBillingPermissionVersion":2,"mySignatureVersion":1,"showCreditCoupons":true,"showCreditCouponsOnlyBsd":true,"bulkForeignTransfersVersion":1,"showLanguageSelector":1,"unLimitationBeneficiaryValidityProtocol":2,"fileUploadImageResize":true,"showTzameretConcentration":true,"paymentShohamVersion":2,"authenticationMarketingMessages":true,"accountAccessPrivilegesVersion":2,"foreignCurrencyRatesVersion":2,"currencyExchangeVersion":2,"pensionSignPreConsultationVersion":1,"createOrderTerminalVersion":1,"showFingerprintIdentification":true,"showProfileMarketingInformation":false,"xsrf":false,"collectionDocumentsVersion":1,"addShakeEvent":false,"showRestoreUserId":false,"allowUsbAuthentication":false,"allowFullHdResolution":true,"creditSupplierVersion":2,"showSuccessPdfNewOrderTerminal":false,"showFactoring":false,"showNonBankCards":true,"showAccountBillingPermission":true,"documentaryCreditVersion":1,"orderBizChecksVersion":1,"showNewMegaMenu":true,"webProtocolTempUserMsg":false,"showHandlingCommission":true,"isBagelLoginRedirect":false,"balancesSummaryVersion":2,"gtmApiVersion":2,"showWeb360Header":true,"showCardLinkToForeignAccount":true,"showCardFees":true,"forgetPasswordVersion":2,"isShowNegativeOrPositiveBalanceFilter":false,"connectResponsiveState":1,"showTransferCardDebits":true,"showCardPresentedInd":false,"showCurrCardPresentedInd":false,"showPrevCardPresentedInd":false,"showSignaturesDetails":false,"showOshFilterOneDay":false,"incomeAndExpensesVersion":2,"isSupportHoursKorona":true,"isQuickOperationsKorona":true,"isMailToBankerServiceClosed":false,"isMailToBankerServiceKorona":true,"isShowIsracardSiteLink":true,"isShowCalSiteLink":true,"isShowMaxSiteLink":true,"showMesSecondarySign":true,"showKana":false,"isCheckBooksOrderKorona":true,"showYoutubeVideoLink":false,"isMeetingAppointmentKorona":true,"showPlasticCardKorona":false,"isBizChecksOrderCorona":false,"currentPositionBalanceVersion":1,"historicalValuationVersion":1,"foreignTradeMessagesVersion":1,"showProtocolYoutubeVideoLink":false,"showBizCoupons":false,"isBizResetPasswordOnlyBankCard":false,"allowBizResetPassword":false,"bitCredit":false,"digitalDocsPermissions":3,"codeRestorationNowOption":false,"bizReportTemplate":false,"bizReportTemplateVersion":3,"showCallMe":false,"showCallMeConnect":false,"showApprovalsAndPrints":false,"showBizCampaign":false,"allowAccountsPreferencesModal":false,"isAccountsPreferences":true,"depositChecksVersion":1,"showOpenUserPass":false,"accountsFilterVersion":1,"updateAccountsRoles":true,"showChat":false,"showMultiChecks":true,"showOpenBanking":true,"depositToDepositVersion":2,"balancesVersion":1,"isObs":false,"isShowFavoriteAccounts":false,"showCardlessCashLink":false,"beneficiariesManagementVersion":1,"showBuildIndication":false,"futureTransactionsWso2":true,"dcAmendmentVersion":1,"dmShowAdviser":false,"dmShowUploadFiles":false,"dmShowUploadFilesAdviser":false,"dmShowEligibilitySwitch":false,"dmShowAdviserRefinance":false,"showSecuritiesBizEn":false,"bizLoginVersion":2,"showForeignTradeDraftPdf":false,"eventSignatureVersion":1,"showPoalimWish":true,"showBizObs":false,"showCurrencyTransactionsMultyAccounts":false,"decisionToolsWso2Version":true,"showOshFilter2YearAgo":true,"showSpecificSla":true,"isShowAllReports":false,"showOpenOTP":true,"showBizCodeRestoration":false,"showChequeOrdersActivation":true,"showMovingToBnhp":true,"isNewLook":false,"showWrittenCommReqStatus":true,"showChatbotBtn":true,"accountBillingPermissionWso2Version":false,"accountBillingWso2SmartSearch":false,"enableIntegralLink":false,"pdfOnCanvas":true,"pdfCanvasEmbed":false,"pdfModalAllowedApps":["account_management"],"pdfModalMinimalMobileVersion":4160,"foreignCurrencyMyOrdersVersion":1,"terminalForeignCurrency":true,"terminalForeignCurrencyLink":true,"terminalNonCustomerForeignCurrency":true,"forgotPasswordEnglish":false,"showRouteCancel":false,"showTransferStandingOrderBiz":false,"showMyBenefits":3,"depositsAndSavingWso2Version":true,"homePageVersion":2,"bsdHomePageVersion":2,"isMobileHomePageNewDesign":false,"isCardsTransactionTotals":false,"isAcosticBiz":true,"connectivityEvent":true,"showConnectProLogo":true,"transfersBnpVersion":1,"showMySecuritiesEvents":true,"showSecuritiesEventsAccountOrders":true,"showSecuritiesEventsHistory":false,"creditLimitsModernizationSwitch":true,"creditLimitsFcModernizationSwitch":true,"foreignCurrencyStandingOrderVersion":2,"foreignTaxationVersion":2,"bulkForeignTaxationVersion":2,"draftForeignTaxationVersion":2,"allowChatBotNotConnectBiz":false,"isDirectTransactions":true,"digitalEmpowermentScreenSso":true,"isNewFooter":true,"isMfp":false,"showSearchInputEnSite":false,"showMessagesOnObs":false,"isChecksOrderStrengthIdentity":true,"strengthIdentity":{"signup":true,"fortified":true,"reissue":true,"changePassword":true,"changeUsername":true,"oneIdentifier":true,"phoneUpdate":true,"tokenRegister":true,"poalimPassRegister":true,"bizRegisterPersonalComputer":true,"staUpdate":true,"enableWebOtp":true,"aboutToExpire":true,"isSignupGuard":true,"mustChangePassword":true},"depositAndSavingsMultipleNewService":true,"showPermanentBeneficiariesBulk":false,"ShowSearchInMobile":true,"showConsoleWarning":false,"ellaUseNewVersionSwitch":false,"showUpdateAppointment":true,"fixDisplayTransactions":true,"caPoc":false,"appointmentProServices":true,"isDynamicWithDrawalActiveHours":true,"isNisTransactionApprovalNeeded":true,"isGoldTransactionApprovalNeeded":true,"disableChatbotEnSite":true,"caBizWhitenComputerVersion":1,"showBizSignatures":true,"showObs":true,"creditCardP2PTransactionDetails":true,"obsErrorPage":true,"checkClickedAccount":true,"allowWithdrawalWithoutACardToOther":false,"allowDwhInSearch":false,"showAuthorizationsUpdateNote":true,"permanentBeneficiariesNew":false,"allowModernizationLoansLobbyBiz":false,"futureTransactionsHomepage":true,"showTransferIban":true,"checksOrderStatusNewDesign":true,"loanEligibilityVersion":2,"showNextTopicWrittenCommunication":true,"isWrittenComNextTopicFormsEnabled":true,"isWrittenComNextTopicHavutEnabled":true,"isUpdatePhoneInCa":false,"showCurrentAccountsTransactionsPdf":true,"moneyTransferStandingOrderVersion":1,"isMobileHomePageNewDesign4":false,"showCreditKeys":true,"bizConnectivityEvent":false,"isSearchInMobile":true,"showForgetIdentifyings":false,"multichannelLoanAndCreditVersion":2,"implementCreditLimitVersion":2,"showNationalSiteLink":false,"logDuplicateUuid":true,"allowPopupReasonCancellation":true,"isUpdateFrameSso":true,"isWarTime":true,"mortgageWarNoticeSwitch":true,"mortgagesLetterOfIntentVersion":2,"terminalForeignCurrencyUpdate":true,"cancelForeignCurrencyOrder":true,"createMeetingVersion":2,"isUnDepositChecksEnabled":true,"isUndepositChecksExcelEnabled":false,"isGetInstructionsToCustomerUndepositChecks":true,"showInquiries":true,"debitAuthStandingOrdersVersion":1,"showMeetingInlineEmbeddedNewVersion":true,"showMeetingInlineNewVersion":true,"nextTopicLogout":true,"isTriggerChatFromMeetingAppointment":true,"embedded":false};
+            bnhpApp.buildVersion = "68.39.18b";
+            bnhpApp.envName = "beta";
+            bnhpApp.debugMode = false;
+            bnhpApp.chatbot = {"id":"603f7a52d31a7500486f9ab6"};
+            </script>
+
+<script src="polyfills.f33381f75e243402.js" type="module"></script><script src="scripts.342a0117f0f05003.js" defer=""></script><script src="main.23c127d76ff3545f.js" type="module"></script>
+
+</body></html>
