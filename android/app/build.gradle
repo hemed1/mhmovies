@@ -1,0 +1,81 @@
+plugins {
+    id "com.android.application"
+    // START: FlutterFire Configuration
+    // id 'com.google.gms.google-services'
+    // END: FlutterFire Configuration
+    id "kotlin-android"
+    //kotlin("jvm") version "2.0.0"
+//    id kotlin("multiplatform") version "2.1.0"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+android {
+    namespace = "com.meirhemed.mhmovies"
+    compileSdk = 36    //flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    //compileSdk = 35    // flutter.compileSdkVersion
+    //compileSdkVersion = 35      //flutter.compileSdkVersion
+    ////minSdkVersion == 23
+    //compileSdk = 33     //flutter.compileSdkVersion
+
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8
+    }
+
+    defaultConfig
+    {
+        applicationId = "com.meirhemed.mhmovies"
+        minSdkVersion flutter.minSdkVersion
+        //noinspection OldTargetApi
+        targetSdkVersion 36         //flutter.targetSdkVersion
+        minSdkVersion flutter.minSdkVersion     //flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    buildTypes {
+        release {
+            // TODO: Add your own signing config for the release build.
+            // Signing with the debug keys for now, so `flutter run --release` works.
+            signingConfig = signingConfigs.debug
+        }
+    }
+//app level
+//    composeOptions {
+//        kotlinCompilerExtensionVersion '1.5.3'
+//    }
+//
+//
+//    kotlinOptions
+//    {
+//        jvmTarget = '17'
+//        //jvmTarget = '1.8'
+//    }
+//
+//    kotlin
+//    {
+//        jvmToolchain(17)
+//    }
+}
+
+//lintOptions {
+//    checkReleaseBuilds false
+//}
+//apply plugin: 'com.android.application'
+
+
+flutter {
+    source = "../.."
+}
+
+
+
