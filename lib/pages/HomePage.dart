@@ -75,6 +75,8 @@ class _HomePageState<T> extends State<HomePage>   //implements ListView_Extend
   late WidgetHomePage? widgetHomePage = null;
 
   // late TextStyle styleButtonsCaptions = TextStyle(color: buttonsForegroundColor, fontSize: 18.0, fontWeight: FontWeight.w600);
+  double keepScrollPosition = 0;
+  int    keepScrollerIndex = 0;
   late double screenHeight;  // AppBar width, down buttons width
   late double screenWidth;
 
@@ -633,15 +635,23 @@ class _HomePageState<T> extends State<HomePage>   //implements ListView_Extend
     // Favorite icon
     deleteWidget = SizedBox(width: 26.0, height: 26.0,
                       child:
-                        IconButton(
-                          color: Theme.of(context).colorScheme.primary,
-                          hoverColor: Colors.red,
-                          icon: Icon((movieInstant.IsFavorite) ? Icons.favorite : Icons.favorite_border, size: 26.0, color: Theme.of(context).colorScheme.primary),
-                          onPressed: () async
-                          {
-                            await this.dataProvider.saveFavorite(movieInstant);
-                          },
-                      ));
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                            child:
+                              IconButton(
+                              color: Theme.of(context).colorScheme.primary,
+                              hoverColor: Colors.red,
+                              icon: Icon((movieInstant.IsFavorite) ? Icons.favorite : Icons.favorite_border, size: 26.0, color: Theme.of(context).colorScheme.primary),
+                              onPressed: () async
+                              {
+                                _scrollerGet();
+
+                                await this.dataProvider.saveFavorite(movieInstant);
+
+                                _scrollerSet();
+                              },
+                            ),
+                        ));
 
 
     String description = movieInstant.Description.trim();
@@ -670,7 +680,8 @@ class _HomePageState<T> extends State<HomePage>   //implements ListView_Extend
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children:
             [
-              SizedBox(width: screenWidth - 5, /*height: 25.0,*/ child: titleWidget),
+              SizedBox(width: screenWidth - 5, /*height: 25.0,*/
+                  child: titleWidget),
 
               deleteWidget
             ]);
@@ -1037,8 +1048,7 @@ class _HomePageState<T> extends State<HomePage>   //implements ListView_Extend
   Future<void> onTap(Object item)  async
   {
 
-    // double scrollPosition = this.scrollPosition;
-    // int scrollerIndex = this.scrollerIndex;
+    _scrollerGet();
 
     Movie note = item as Movie;
     MovieDetailsPageArguments noteDetailsPageArguments = MovieDetailsPageArguments(noteObject: note, isUpdateMode: true, onEvenDeleteSucss: onEvenDeleteSucss);
@@ -1048,12 +1058,7 @@ class _HomePageState<T> extends State<HomePage>   //implements ListView_Extend
     // When returned from page 'NoteDetailsPage', Refresh list
     await navigatorAnswerHandle(resultNavigator, note as T, noteDetailsPageArguments.isEarlyAlarm);
 
-    // setState(() async
-    // {
-    //   this.widgetHomePage!.scrollPosition = scrollPosition;
-    //   this.widgetHomePage!.scrollerIndex = scrollerIndex;
-    // });
-
+    _scrollerSet();
   }
 
 
@@ -2123,7 +2128,7 @@ class _HomePageState<T> extends State<HomePage>   //implements ListView_Extend
     Globals.tableDirectors = await sortMap(Globals.tableDirectors);
 
     // Where there is a change in tables structure - Change the tables with copy Data
-    await _changeTable();
+    // await _changeTable();
   }
 
   /// Where there is a change in tables structure - Change the tables with copy Data
@@ -2774,6 +2779,18 @@ class _HomePageState<T> extends State<HomePage>   //implements ListView_Extend
     //final String newNoteID = await NetworkHttp.post(db.BaseUrl, {'Content-Type': 'application/json'}, dataToSend, 'TBL_Databases.json');
     dataToSend =  {'FirebaseID': newRecordID};
     await this.dataProvider.DatabaseHelper.updateRecordInTable('TBL_Databases', dataToSend);
+  }
+
+  void _scrollerSet()
+  {
+    this.scrollPosition = keepScrollPosition;
+    // this.scrollerIndex = keepScrollerIndex;
+  }
+
+  void _scrollerGet()
+  {
+    keepScrollPosition = this.scrollPosition;
+    keepScrollerIndex = this.scrollerIndex;
   }
 
 }

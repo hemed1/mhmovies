@@ -10,10 +10,10 @@
 //import 'package:multiselect_dropdown/multiselect_dropdown.dart';
 // import 'package:multiselect_dropdown_flutter/multiselect_dropdown_flutter.dart';
 // import 'package:multiselect/multiselect.dart';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import '../enums/Enums.dart';
 import 'file:///Users/meirh/Desktop/Develope/Flutter/Services/DataProvider.dart';
-import 'package:multi_dropdown/models/value_item.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 import 'package:provider/provider.dart';
 import '/utils/Globals.dart';
@@ -25,7 +25,7 @@ import 'file:///Users/meirh/Desktop/Develope/Flutter/Widgets/WidgetComboBox.dart
 import 'file:///Users/meirh/Desktop/Develope/Flutter/Services/ValueItemGlobal.dart';
 import 'file:///Users/meirh/Desktop/Develope/Flutter/Services/NoteChild.dart';
 import 'file:///Users/meirh/Desktop/Develope/Flutter/Widgets/GenericMultiLines.dart';
-
+import 'file:///Users/meirh/Desktop/Develope/Flutter/Services/NoteImage.dart';
 
 
 class MovieDetailsPage extends StatefulWidget
@@ -108,6 +108,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   late BuildContext _context;
   bool isUpdateMode = false;
   bool isSaved = false;
+  bool isFirstTime = true;
   bool isFromFavoritePage = false;
   String actionDesc='';
   late Movie CurrentMovie;
@@ -124,8 +125,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     this._context = context;
     MainGlobals.context = context;
     Globals.context = context;
-    screenWidth = MainGlobals.getScreenSize(_context).width - 40.0;
-    screenHeight = MainGlobals.getScreenSize(_context).height - 160.0;
+    final Size size = MainGlobals.getScreenSize(_context);
+    screenWidth = size.width - 40.0;
+    screenHeight = size.height - 160.0;
 
     // Get Main object & Properties
     final args = ModalRoute.of(context)?.settings.arguments as MovieDetailsPageArguments;
@@ -135,9 +137,19 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     EvenDeleteSucss = args.onEvenDeleteSucss;
 
 
-    if (isUpdateMode)
+
+    if (isFirstTime)
     {
-      setRecordToObject(this.CurrentMovie);
+      isFirstTime = false;
+      if (this.CurrentMovie.Images.isEmpty)
+      {
+        this.CurrentMovie.Images = [];
+      }
+      MainGlobals.keepNoteImages(this.CurrentMovie);
+      if (isUpdateMode)
+      {
+        setRecordToObject(this.CurrentMovie);
+      }
     }
 
     imagesList = this.CurrentMovie.CreateValidUrlsToShowImage();
@@ -149,8 +161,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
                        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                        actions:
                        [
-                        // Top Buttons
-                        SizedBox(width: 315.0, height: 40.0,    // For space between buttons
+                          // Top Buttons
+                          SizedBox(width: 315.0, height: 40.0,    // For space between buttons
                           child:
                             Center(
                             child:
@@ -236,708 +248,798 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             textDirection: TextDirection.rtl,
             child:
 
+              // Main container
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children:
+                [
+                  Container(
+                    padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0, bottom: 8.0),
+                    margin:  const EdgeInsets.only(left: 7.0, right: 7.0, top: 7.0, bottom: 7.0),
+                    // height: screenHeight - 10.0,
+                    // width:  screenWidth - 20.0,
+                    decoration: BoxDecoration(
+                                  color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.2),    //.inversePrimary
+                                  border: Border.all(color: Theme.of(context).colorScheme.secondary),
+                                  borderRadius: const BorderRadius.all(Radius.circular(7.0))),
 
-              Center(
-                child:
+                    child:
+                      SingleChildScrollView(
+                        // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                        scrollDirection: Axis.vertical,
+                        child:
 
-                  // Main container
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children:
-                    [
-                      Container(
-                        padding: const EdgeInsets.only(left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                        margin:  const EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0,bottom: 10.0),
-                        // height: screenHeight - 10.0,
-                        // width:  screenWidth - 20.0,
-                        decoration: BoxDecoration(
-                                      color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.1),    //.inversePrimary
-                                      border: Border.all(color: Theme.of(context).colorScheme.secondary),
+                          Column(
+                            // crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children:
+                            [
+                              // Buttons Row
+                              SizedBox(height: 37.0,        //width: 110.0,
+                                child:
+                                  Row(
+                                    textDirection: TextDirection.rtl,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children:
+                                    [
+                                      // // 'מסך מלא' button
+                                      // SizedBox(height: 34.0,
+                                      //     child:
+                                      //       TextButton(
+                                      //         child: Text('מסך מלא', style: MainGlobals.g_styleButtonsSub),
+                                      //         onPressed: ()   async
+                                      //         {
+                                      //           // String tmp = '';
+                                      //           // if (this.isRichText)
+                                      //           // {
+                                      //           //   tmp = await widgetRichTextNormalScreen!.getHtmlText();
+                                      //           // }
+                                      //           // setState(()
+                                      //           // {
+                                      //           //   if (this.isRichText)
+                                      //           //   {
+                                      //           //     if (widgetRichTextFullScreen != null)
+                                      //           //     {
+                                      //           //       widgetRichTextFullScreen!.initValue = tmp;
+                                      //           //       widgetRichTextFullScreen!.setHtmlText(tmp);
+                                      //           //       // await setRichTextBetweenScreens(widgetRichTextFullScreen!, true);
+                                      //           //     }
+                                      //           //     controllerDescription.text = tmp;
+                                      //           //   }
+                                      //           //   // Widget of Note text page
+                                      //           //   isFullScreenMode = true;
+                                      //           //   isAlreadyLoadedFullScreen = false;
+                                      //         }
+                                      //     )
+                                      //   ),
+
+                                      // SubTasks screen - Generic screen with rows & checkboxes
+
+                                      SizedBox(height: 37.0,
+                                          child:
+                                            TextButton(
+                                              child:
+                                              Text('פריטים נוספים', style: MainGlobals.g_styleButtonsSub),
+                                              onPressed: () async
+                                              {
+                                                  // Open generic page, with rows of TextBoxes & CheckBoxes
+                                                  await openSubTasksScreen();
+                                              })),
+
+                                      // Pictures screen
+                                      SizedBox(height: 37.0,    //width:80.0
+                                          child:
+                                            TextButton(
+                                              child: Text('תמונות', style: MainGlobals.g_styleButtonsSub),
+                                              onPressed: () async
+                                              {
+                                                Navigator.pushNamed(context, '/picture_big', arguments: PicturePageArguments(moviesLinks: imagesList, movieTitle: this.CurrentMovie.Title, movie: this.CurrentMovie));
+                                              })),
+
+                                  ])),
+
+                              /// Scroll Images
+                              if (!isImagesLinksOpen)
+                                Container(
+                                  height: 140,
+                                  width: screenWidth + 5.0,
+                                  padding: const EdgeInsets.all(2.0),
+                                  margin: const EdgeInsets.only(left: 0.0, right: 0.0),
+                                  decoration: BoxDecoration(
+                                      //color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.4),
+                                      border: Border.all(color: Colors.black87, width: 0.7),   // Theme.of(context).colorScheme.secondary
                                       borderRadius: const BorderRadius.all(Radius.circular(7.0))),
 
-                        child:
-                          SingleChildScrollView(
-                            // keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-                            scrollDirection: Axis.vertical,
-                            child:
+                                  child:
+                                      //if (this.CurrentMovie.Images.isNotEmpty || this.CurrentMovie.SelfLink.isNotEmpty)
+                                      ListView.builder(
+                                        itemCount: imagesList.length,
+                                        physics: const BouncingScrollPhysics(),   // ClampingScrollPhysics(),mNeverScrollableScrollPhysics(),
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index)
+                                        {
+                                          Widget imageWidget = const SizedBox();
 
-                              Column(
-                                // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          if (imagesList[index].isEmpty)
+                                          {
+                                            return imageWidget;
+                                          }
+
+                                          imageWidget = MainGlobals.extractUrl(imagesList[index], false);
+
+                                          return
+                                            GestureDetector(
+                                              child:
+                                               Card(
+                                                elevation: 4.0,
+                                                child:
+                                                   SizedBox(
+                                                      width: 90.0,
+                                                      height: 50.0,     //double.infinity,    // 50.0,
+
+                                                       child:
+                                                          imageWidget
+
+                                                   )
+                                              ),
+
+                                              onDoubleTap: ()
+                                              {
+                                                Navigator.pushNamed(context, '/picture_big', arguments: PicturePageArguments(moviesLinks: imagesList, movieTitle: this.CurrentMovie.Title, movie: this.CurrentMovie));
+                                              },
+                                            );
+                                        }
+                                                                                ),
+                                ),
+
+
+                              // Button - Close images & links
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children:
                                 [
-                                  // Buttons Row
-                                  SizedBox(height: 37.0,        //width: 110.0,
+                                  SizedBox(height: 26.0,
                                     child:
-                                      Row(
-                                        textDirection: TextDirection.rtl,
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children:
-                                        [
-                                          // // 'מסך מלא' button
-                                          // SizedBox(height: 34.0,
-                                          //     child:
-                                          //       TextButton(
-                                          //         child: Text('מסך מלא', style: MainGlobals.g_styleButtonsSub),
-                                          //         onPressed: ()   async
-                                          //         {
-                                          //           // String tmp = '';
-                                          //           // if (this.isRichText)
-                                          //           // {
-                                          //           //   tmp = await widgetRichTextNormalScreen!.getHtmlText();
-                                          //           // }
-                                          //           // setState(()
-                                          //           // {
-                                          //           //   if (this.isRichText)
-                                          //           //   {
-                                          //           //     if (widgetRichTextFullScreen != null)
-                                          //           //     {
-                                          //           //       widgetRichTextFullScreen!.initValue = tmp;
-                                          //           //       widgetRichTextFullScreen!.setHtmlText(tmp);
-                                          //           //       // await setRichTextBetweenScreens(widgetRichTextFullScreen!, true);
-                                          //           //     }
-                                          //           //     controllerDescription.text = tmp;
-                                          //           //   }
-                                          //           //   // Widget of Note text page
-                                          //           //   isFullScreenMode = true;
-                                          //           //   isAlreadyLoadedFullScreen = false;
-                                          //         }
-                                          //     )
-                                          //   ),
-
-                                          // SubTasks screen - Generic screen with rows & checkboxes
-
-                                          SizedBox(height: 37.0,
-                                              child:
-                                                TextButton(
-                                                  child:
-                                                  Text('פריטים נוספים', style: MainGlobals.g_styleButtonsSub),
-                                                  onPressed: () async
-                                                  {
-                                                      // Open generic page, with rows of TextBoxes & CheckBoxes
-                                                      await openSubTasksScreen();
-                                                  })),
-
-                                          // Pictures screen
-                                          SizedBox(height: 37.0,    //width:80.0
-                                              child:
-                                                TextButton(
-                                                  child: Text('תמונות', style: MainGlobals.g_styleButtonsSub),
-                                                  onPressed: () async
-                                                  {
-                                                    Navigator.pushNamed(context, '/picture_big', arguments: PicturePageArguments(moviesLinks: imagesList, movieTitle: this.CurrentMovie.Title));
-                                                  })),
-
-                                      ])),
-
-                                  /// // Scroll Images
-                                  if (!isImagesLinksOpen)
-                                  Container(
-                                      height: 140,
-                                      width: 400,
-                                      padding: const EdgeInsets.all(1.0),
-                                      margin: const EdgeInsets.only(left: 10.0, right: 10.0),
-                                      decoration: BoxDecoration(
-                                          //color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.4),
-                                          border: Border.all(color: Colors.black87, width: 1.0),   // Theme.of(context).colorScheme.secondary
-                                          borderRadius: const BorderRadius.all(Radius.circular(10.3))),
-
-                                      child:
-                                          //if (this.CurrentMovie.Images.isNotEmpty || this.CurrentMovie.SelfLink.isNotEmpty)
-                                          Padding(
-                                            padding: const EdgeInsets.all(3.0),
-                                              child:
-                                                ListView.builder(
-                                                  itemCount: imagesList.length,
-                                                  physics: const BouncingScrollPhysics(),   // ClampingScrollPhysics(),mNeverScrollableScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  scrollDirection: Axis.horizontal,
-
-                                                  itemBuilder: (context, index)
-                                                  {
-                                                    Widget imageWidget = const SizedBox();
-
-                                                    if (imagesList[index].isEmpty)
-                                                    {
-                                                      return imageWidget;
-                                                    }
-
-                                                    imageWidget = MainGlobals.extractUrl(imagesList[index], false);
-
-                                                    return
-                                                      GestureDetector(
-                                                        child:
-                                                         Card(
-                                                          elevation: 4.0,
-                                                          child:
-                                                             SizedBox(
-                                                                width: 90.0,
-                                                                height: 50.0,     //double.infinity,    // 50.0,
-
-                                                                 child:
-                                                                    imageWidget
-
-                                                             )
-                                                        ),
-
-                                                        onDoubleTap: ()
-                                                        {
-                                                          Navigator.pushNamed(context, '/picture_big', arguments: PicturePageArguments(moviesLinks: imagesList, movieTitle: this.CurrentMovie.Title));
-                                                        },
-                                                      );
-                                                  }
-                                              ),
-                                          ),
-                                  ),
-
-
-                                  // Change between images links
-
-                                   SizedBox(height: 30.0,
-                                    child: TextButton(
+                                      TextButton(
                                         onPressed: ()
                                         {
-                                          isImagesLinksOpen = !isImagesLinksOpen;
-                                          setState(() {});
+                                          setState(()
+                                          {
+                                            isImagesLinksOpen = !isImagesLinksOpen;
+                                          });
                                         },
                                         isSemanticButton: true,
-                                        child: const Row(
+                                        child:
+                                          const Row(
                                           children:
                                           [
-                                            Text('More...', style: TextStyle(color: Colors.blue, fontSize: 11.0,),),
-                                            Icon(Icons.read_more)
+                                            // Text('More...', style: TextStyle(color: Colors.blue, fontSize: 11.0,),),
+                                            Icon(Icons.open_in_browser, size: 25.0,)
                                           ],
                                         ))),
+                                ],
+                              ),
 
-                                  /// Get Images links
-                                  if (!isImagesLinksOpen)
+
+                              /// Get Images links TextBox
+                              if (!isImagesLinksOpen)
+                                Column(
+                                  children:
+                                  [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      textDirection: TextDirection.ltr,
+                                      children:
+                                      [
+                                        SizedBox(width: screenWidth + 8.0,     //height: 60,
+                                          child:
+                                            TextField(
+                                                controller: controllerImage1,
+                                                keyboardType: TextInputType.text,
+                                                textAlign: TextAlign.left,
+                                                style: const TextStyle(fontSize: 15.0, ),
+                                                decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: 'תמונה 1',
+                                                                            icon: IconButton(icon: const Icon(Icons.file_download_outlined, size: 22.0),
+                                                                                    onPressed: () async
+                                                                                    {
+                                                                                      Map<String, Object?>? image = await MainGlobals.pickImageFromLibrary();
+                                                                                      if (image != null)
+                                                                                      {
+                                                                                        final String path = image['key'] as String;
+                                                                                        final Uint8List codesList = image['value'] as Uint8List;    //List<int>;
+                                                                                        NoteImage noteImage = NoteImage(NoteID: this.CurrentMovie.MovieID, Image: codesList, FirebaseID: this.CurrentMovie.FirebaseID);
+                                                                                        this.CurrentMovie.Images.add(noteImage);
+                                                                                        controllerImage1.text = path;
+                                                                                        setState(()
+                                                                                        {
+
+                                                                                        });
+                                                                                      }
+                                                                                    })),
+                                            )),
+                                     ]),
+
+
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      textDirection: TextDirection.ltr,
+                                      children:
+                                      [
+                                        SizedBox(width: screenWidth + 8.0,       //height: 60,
+                                          child:
+                                            TextField(
+                                              controller: controllerImage2,
+                                              keyboardType: TextInputType.text,
+                                              style: const TextStyle(fontSize: 15.0),
+                                              decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: 'תמונה 2',
+                                                                          icon: IconButton(icon: const Icon(Icons.file_download_outlined, size: 22.0),
+                                                                                  onPressed: () async
+                                                                                  {
+                                                                                    Map<String, Object?>? image = await MainGlobals.pickImageFromLibrary();
+                                                                                    if (image != null)
+                                                                                    {
+                                                                                      final String path = image['key'] as String;
+                                                                                      final Uint8List codesList = image['value'] as Uint8List;    //List<int>;
+                                                                                      NoteImage noteImage = NoteImage(NoteID: this.CurrentMovie.MovieID, Image: codesList, FirebaseID: this.CurrentMovie.FirebaseID);
+                                                                                      this.CurrentMovie.Images.add(noteImage);
+                                                                                      controllerImage2.text = path;
+                                                                                      setState(()
+                                                                                      {
+
+                                                                                      });
+                                                                                    }
+                                                                                  })),
+                                              )),
+
+                                     ]),
+
+
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      textDirection: TextDirection.ltr,
+                                      children:
+                                      [
+                                        SizedBox(width: screenWidth + 8.0,     //height: 60,
+                                          child:
+                                            TextField(
+                                                controller: controllerImage3,
+                                                keyboardType: TextInputType.text,
+                                                decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: 'תמונה 3', icon: IconButton(icon: const Icon(Icons.file_download_outlined, size: 22.0),
+                                                    onPressed: () async
+                                                    {
+                                                      Map<String, Object?>? image = await MainGlobals.pickImageFromLibrary();
+                                                      if (image != null)
+                                                      {
+                                                        setState(()
+                                                        {
+                                                          final String path = image['key'] as String;
+                                                          final Uint8List codesList = image['value'] as Uint8List;    //List<int>;
+                                                          NoteImage noteImage = NoteImage(NoteID: this.CurrentMovie.MovieID, Image: codesList, FirebaseID: this.CurrentMovie.FirebaseID);
+                                                          this.CurrentMovie.Images.add(noteImage);
+                                                          controllerImage3.text = path;
+                                                        });
+                                                      }
+                                                    })),
+                                                style: const TextStyle(fontSize: 15.0))),
+
+                                        // SizedBox(width: 24, height: 24,
+                                        //   child:
+                                        //     TextButton(
+                                        //       onPressed: () async
+                                        //       {
+                                        //         Map<String, Object>? image = await MainGlobals.pickImageFromLibrary();
+                                        //         if (image != null)
+                                        //         {
+                                        //           final String path = image['key'] as String;
+                                        //           //final Uint8List imageBytes = image['key'] as Uint8List;
+                                        //           setState(()
+                                        //           {
+                                        //             controllerImage3.text = path;
+                                        //           });
+                                        //         }
+                                        //       },
+                                        //       isSemanticButton: true,
+                                        //       child: const Icon(Icons.file_download_outlined, size: 24.0))),
+                                      ]),
+
+
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      textDirection: TextDirection.ltr,
+                                      children:
+                                      [
+                                        SizedBox(width: screenWidth + 8.0,     //height: 60,
+                                          child:
+                                            TextField(
+                                              controller: controllerImage4,
+                                              keyboardType: TextInputType.text,
+                                              decoration: InputDecoration(border: const UnderlineInputBorder(), labelText: 'תמונה 4',
+                                                                          icon: IconButton(icon: const Icon(Icons.file_download_outlined, size: 22.0),
+                                                                                  onPressed: () async
+                                                                                  {
+                                                                                    Map<String, Object?>? image = await MainGlobals.pickImageFromLibrary();
+
+                                                                                    if (image != null)
+                                                                                    {
+                                                                                      final String path = image['key'] as String;
+                                                                                      final Uint8List codesList = image['value'] as Uint8List;    //List<int>;
+                                                                                      NoteImage noteImage = NoteImage(NoteID: this.CurrentMovie.MovieID, Image: codesList, FirebaseID: this.CurrentMovie.FirebaseID);
+                                                                                      this.CurrentMovie.Images.add(noteImage);
+                                                                                      controllerImage4.text = path;
+                                                                                      setState(()
+                                                                                      {
+
+                                                                                      });
+                                                                                    }
+                                                                                  })),
+                                              style: const TextStyle(fontSize: 15.0)
+                                            )),
+
+                                    ]),
+
+
+                                    // Self Link field
+                                    TextField(
+                                        controller: controllerSelfLink,
+                                        keyboardType: TextInputType.text,
+                                        decoration: const InputDecoration(
+                                                            border: UnderlineInputBorder(),
+                                                            labelText: 'Self Link',
+                                                          ),
+                                        style: const TextStyle(fontSize: 15.0)),
+
+                                    // Download Folder
+                                    TextField(
+                                        controller: controllerDownloadFolder,
+                                        keyboardType: TextInputType.text,
+                                        decoration: const InputDecoration(
+                                                            border: UnderlineInputBorder(),
+                                                            labelText: 'Folder',
+                                                          ),
+                                        style: const TextStyle(fontSize: 15.0)),
+
+                              ]),
+
+                              const SizedBox(height: 10.0),
+
+
+                              // ---------------------------------------------------------------------- //
+                              // Show Movie Details Textbox fields under the Image
+                              Column(
+                                // crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children:
+                                [
+                                    // Title, ID Caption
                                     Column(
                                       children:
                                       [
                                         Row(
-                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          // crossAxisAlignment: CrossAxisAlignment.end,
                                           children:
                                           [
-                                            SizedBox(width: 170, height: 60,
+                                            Text('כותרת  (חובה להקליד)', style: MainGlobals.g_styleFieldsCaptions),
+                                            // Film Types
+                                            SizedBox(height: 35.0, width: 140.0,
                                               child:
-                                                TextField(
-                                                    controller: controllerImage1,
-                                                    keyboardType: TextInputType.text,
-                                                    decoration: const InputDecoration(
-                                                      border: UnderlineInputBorder(),
-                                                      labelText: 'Image 1',
-                                                    ),
-                                                    style: const TextStyle(fontSize: 13.0)
-                                                ),
-                                            ),
-
-                                            const SizedBox(width: 20.0,),
-
-                                            SizedBox(width: 170, height: 60,
-                                              child:
-                                                TextField(
-                                                    controller: controllerImage2,
-                                                    keyboardType: TextInputType.text,
-                                                    decoration: const InputDecoration(
-                                                      border: UnderlineInputBorder(),
-                                                      labelText: 'Image 2',
-                                                    ),
-                                                    style: const TextStyle(fontSize: 13.0)
-                                                ),
-                                            )
-                                          ],
-                                        ),
-
-                                        Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            SizedBox(width: 170, height: 60,
-                                              child:
-                                              TextField(
-                                                  controller: controllerImage3,
-                                                  keyboardType: TextInputType.text,
-                                                  decoration: const InputDecoration(
-                                                    border: UnderlineInputBorder(),
-                                                    labelText: 'Image 3',
-                                                  ),
-                                                  style: const TextStyle(fontSize: 13.0)
-                                              ),
-                                            ),
-                                            const SizedBox(width: 20.0,),
-                                            SizedBox(width: 170, height: 60,
-                                              child:
-                                              TextField(
-                                                  controller: controllerImage4,
-                                                  keyboardType: TextInputType.text,
-                                                  decoration: const InputDecoration(
-                                                    border: UnderlineInputBorder(),
-                                                    labelText: 'Image 4',
-                                                  ),
-                                                  style: const TextStyle(fontSize: 13.0)
-                                              ),
-                                            )
-                                          ],
-                                        ),
-
-                                        // Self Link field
-                                        TextField(
-                                            controller: controllerSelfLink,
-                                            keyboardType: TextInputType.text,
-                                            decoration: const InputDecoration(
-                                              border: UnderlineInputBorder(),
-                                              labelText: 'Self Link',
-                                            ),
-                                            style: const TextStyle(fontSize: 13.0)
-                                        ),
-
-                                        // Download Folder
-                                        TextField(
-                                            controller: controllerDownloadFolder,
-                                            keyboardType: TextInputType.text,
-                                            decoration: const InputDecoration(
-                                              border: UnderlineInputBorder(),
-                                              labelText: 'Folder',
-                                            ),
-                                            style: const TextStyle(fontSize: 13.0)
-                                        ),
-                                      ]
-                                    ),
-
-                                  const SizedBox(height: 15.0),
-
-
-                                  // ---------------------------------------------------------------------- //
-                                  // Show Movie Details Textbox fields under the Image
-                                  Column(
-                                    // crossAxisAlignment: CrossAxisAlignment.stretch,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children:
-                                    [
-                                        // Title, ID Caption
-                                        Column(
-                                          children:
-                                          [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              // crossAxisAlignment: CrossAxisAlignment.end,
-                                              children:
-                                              [
-                                                Text('כותרת  (חובה להקליד)', style: MainGlobals.g_styleFieldsCaptions),
-                                                // Film Types
-                                                SizedBox(height: 35.0, width: 140.0,
-                                                  child:
-                                                    WidgetComboBox(
-                                                      selectionType: ComboBoxType.single,
-                                                      Items: widget.filmTypes,
-                                                      // TODO: controllerObjectMulti: controllerSubjects,
-                                                      // Transfer the selected items from long separated by ', ' String - to List<ValueItemGlobal>
-                                                      selectedValue: MainGlobals.getGlobalTablesValueToValueItemGlobals(Globals.tableFilmTypes, this.CurrentMovie.FilmTypeID),
-                                                      title: 'סוג',
-                                                      height: 200.0,
-                                                      SelectedItemBackgroundColor: Theme.of(context).colorScheme.primaryContainer, // The Background color of the Selected Item in list
-                                                      SelectedItemForegroundColor: Colors.black,                          // The Foreground color of the Selected Item in list
-                                                      BackgroundColor: Theme.of(context).colorScheme.inversePrimary,      // The Background color of Items in list (Not selected)
-                                                      ItemForegroundColor: Colors.black,                                  // The Foreground color of Items in list (Not selected)
-                                                      onChanged: (List<ValueItemGlobal> selectedItems)
-                                                      {
-                                                        controllerFilmTypes.text = selectedItems[0].value as String;
-                                                      },
-                                                    )),
-                                                if (isUpdateMode == true)
-                                                  Text('${this.CurrentMovie.MovieID}', textAlign: TextAlign.left, style: const TextStyle(fontSize: 14.0)),
-                                              ],
-                                            ),
-
-                                            const SizedBox(height: 3.0),
-
-                                            // Title field
-                                            Container(
-                                                padding: const EdgeInsets.only(left: 5.0, top: 0.3, right: 5.0, bottom: 0.3),
-                                                decoration: BoxDecoration(
-                                                    color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
-                                                    border: Border.all(color: Colors.grey  /*Theme.of(context).colorScheme.secondary*/, width: 0.7),
-                                                    borderRadius: const BorderRadius.all(Radius.circular(7.0))),
-                                                child:
-                                                TextField(
-                                                  controller: controllerTitle,
-                                                  textAlign: TextAlign.right,
-                                                  textDirection: TextDirection.rtl,    // TODO: maybe to delete, it's parent component haz already value
-                                                  keyboardType: TextInputType.text,
-                                                  textInputAction: TextInputAction.next,
-                                                  autofocus: true,
-                                                  showCursor: true,
-                                                  autocorrect: false,
-                                                  maxLines: 1,
-                                                  decoration: InputDecoration(
-                                                    fillColor: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.2),
-                                                    focusColor: Theme.of(_context).colorScheme.primary,
-                                                    border: InputBorder.none,
-                                                    hintText: 'הקלד/י כותרת...',
-                                                    hintStyle:  MainGlobals.g_styleFieldsCaptions.copyWith(color: Colors.blueGrey),
-                                                    labelStyle: MainGlobals.g_styleFieldsCaptions.apply(fontSizeDelta: 1.0),
-                                                    // enabledBorder: InputBorder.none,  // const UnderlineInputBorder()
-                                                    // focusedBorder: const OutlineInputBorder(gapPadding: 10.0, borderSide: BorderSide(color: Colors.grey, style: BorderStyle.solid)),
-                                                    // labelText:   'כותרת (שדה חובה)',
-
-                                                    //helperText: 'הקלד כותרת ...',
-                                                  ),
-                                                  style: MainGlobals.styleFieldsText.copyWith(fontSize: 25, decoration: (this.CurrentMovie.StatusID == NoteStatusEn.Completed.value || this.CurrentMovie.StatusID == NoteStatusEn.PartialCompleted.value) ? TextDecoration.lineThrough : TextDecoration.none),
+                                                WidgetComboBox(
+                                                  selectionType: ComboBoxType.single,
+                                                  Items: widget.filmTypes,
+                                                  // TODO: controllerObjectMulti: controllerSubjects,
+                                                  // Transfer the selected items from long separated by ', ' String - to List<ValueItemGlobal>
+                                                  selectedValue: MainGlobals.getGlobalTablesValueToValueItemGlobals(Globals.tableFilmTypes, this.CurrentMovie.FilmTypeID),
+                                                  title: 'סוג',
+                                                  height: 200.0,
+                                                  SelectedItemBackgroundColor: Theme.of(context).colorScheme.primaryContainer, // The Background color of the Selected Item in list
+                                                  SelectedItemForegroundColor: Colors.black,                          // The Foreground color of the Selected Item in list
+                                                  BackgroundColor: Theme.of(context).colorScheme.inversePrimary,      // The Background color of Items in list (Not selected)
+                                                  ItemForegroundColor: Colors.black,                                  // The Foreground color of Items in list (Not selected)
+                                                  onChanged: (List<ValueItemGlobal> selectedItems)
+                                                  {
+                                                    controllerFilmTypes.text = selectedItems[0].value as String;
+                                                  },
                                                 )),
+                                            if (isUpdateMode == true)
+                                              Text('${this.CurrentMovie.MovieID}', textAlign: TextAlign.left, style: const TextStyle(fontSize: 14.0)),
                                           ],
                                         ),
 
-                                        const SizedBox(height: 10),
+                                        const SizedBox(height: 3.0),
 
-                                        // Description field
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children:
-                                          [
-                                              // Caption
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.start,
-                                                children:
-                                                [
-                                                  Text('תיאור',textAlign: TextAlign.left, style: MainGlobals.g_styleFieldsCaptions),
-                                                ],
-                                              ),
-
-                                              const SizedBox(height: 3.0),
-
-                                              // Description field
-                                              Container(
-                                                padding: const EdgeInsets.only(left: 5.0, top: 3.0, right: 5.0, bottom: 3.0),
-                                                decoration: BoxDecoration(
-                                                    color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
-                                                    border: Border.all(color: Theme.of(context).colorScheme.secondary),
-                                                    borderRadius: const BorderRadius.all(Radius.circular(9.0))),
-                                                child:
-                                                  TextField(
-                                                    controller: controllerDescription,
-                                                    keyboardType: TextInputType.multiline,
-                                                    decoration: InputDecoration(
-                                                      border: InputBorder.none,
-                                                      hintText: 'הקלד/י הערות נסופות...',
-                                                      hintStyle:  MainGlobals.g_styleFieldsCaptions.copyWith(color: Colors.blueGrey),
-                                                      //labelText: 'Description'
-                                                    ),
-                                                    style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 17, fontStyle: FontStyle.italic),
-                                                    scrollPhysics: const BouncingScrollPhysics(),
-                                                    maxLines: 6,
-                                                    showCursor: true,
-                                                    autocorrect: false,
-                                                    //overflow: TextOverflow.ellipsis
-                                                    //textInputAction: TextInputAction.newline,
-                                                  ),
-                                              //Text(this.CurrentMovie.Description, style: theme.bodyMedium, maxLines: 6),
-                                            ),
-                                          ]),
-
-                                        const SizedBox(height: 15),
-
-                                        // Director, Actors, Writer
+                                        // Title field
                                         Container(
-                                          padding: const EdgeInsets.only(left: 7.0, top: 7.0, right: 7.0, bottom: 7.0),
-                                          decoration: BoxDecoration(
-                                              color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
-                                              border: Border.all(color: Colors.grey  /*Theme.of(context).colorScheme.secondary*/, width: 0.7),
-                                              borderRadius: const BorderRadius.all(Radius.circular(7.0))),
-                                          height: 140.0,
-                                          child:
-
-                                              Column(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                children:
-                                                [
-                                                  // Genre, Film Types
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    textDirection: TextDirection.rtl,
-                                                    children:
-                                                    [
-                                                      SizedBox(height: 35.0, width: screenWidth-90.0,
-                                                        child:
-                                                          WidgetComboBox(
-                                                            selectionType: ComboBoxType.multi,
-                                                            Items: widget.genres,
-                                                            // TODO: controllerObjectMulti: controllerSubjects,
-                                                            // Transfer the selected items from long separated by ', ' String - to List<ValueItemGlobal>
-                                                            selectedValue: MainGlobals.getMultiSelectedItemsSeparatedStringToValueItemGlobals(Globals.tableGenres, this.CurrentMovie.Genre),
-                                                            title: 'ג׳נרים',
-                                                            height: 400.0,
-                                                            textDirection: TextDirection.rtl,
-                                                            SelectedItemBackgroundColor: Theme.of(context).colorScheme.primaryContainer, // The Background color of the Selected Item in list
-                                                            SelectedItemForegroundColor: Colors.black,                          // The Foreground color of the Selected Item in list
-                                                            BackgroundColor: Theme.of(context).colorScheme.inversePrimary,      // The Background color of Items in list (Not selected)
-                                                            ItemForegroundColor: Colors.black,                                  // The Foreground color of Items in list (Not selected)
-                                                            onChanged: (List<ValueItemGlobal> selectedItems)
-                                                            {
-                                                              final List<ValueItem<Object?>> items = ValueItemGlobal.fromGlobalToValueItem(selectedItems);
-                                                              controllerGenre.setOptions(items);
-                                                            },
-                                                          )),
-
-                                                      const SizedBox(width: 5.0),
-
-                                                      // Add button - Open new page for manage the Subjects
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(bottom: 10.0),
-                                                        child:
-                                                          SizedBox(height: 30.0, width: 30,
-                                                            child:
-                                                              IconButton(
-                                                                color: Theme.of(_context).colorScheme.primary,
-                                                                //splashRadius:
-                                                                icon: const Icon(Icons.add, size: 29.0,),
-                                                                iconSize: 30.0,
-                                                                onPressed: () async
-                                                                {
-                                                                  List<String> list = Globals.tableGenres.map((e) => e['Description'] as String).toList();
-                                                                  List<NoteChild> listToShow = [];
-                                                                  for (int i=0; i<list.length; i++)
-                                                                  {
-                                                                    NoteChild noteChild = NoteChild(NoteID: this.CurrentMovie.MovieID, Title: list[i], IsDone: false, FirebaseID: '');
-                                                                    listToShow.add(noteChild);
-                                                                  }
-                                                                  Object? resultNavigator = await Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                                                      GenericMultiLines(
-                                                                          title: 'ניהול ג׳נרים',
-                                                                          itemsList: listToShow,
-                                                                          mode: GenericPageModeEn.EmptyLines,
-                                                                          isFullPage: true,
-                                                                          onConfirmEvent: null)));
-                                                                  if (resultNavigator != null)
-                                                                  {
-                                                                    List<String> list = (resultNavigator as List<NoteChild>).map((e) => e.Title).toList();
-                                                                    await dataProvider.saveNewLookupRecords('TBL_Genres', list);
-                                                                    setState(()
-                                                                    {});
-                                                                  }
-                                                                }
-                                                            )
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-
-                                                  // Directors
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    textDirection: TextDirection.ltr,
-                                                    children:
-                                                    [
-                                                      SizedBox(height: 35.0, width: screenWidth-90.0,
-                                                        child:
-                                                          WidgetComboBox(
-                                                            selectionType: ComboBoxType.multi,
-                                                            Items: widget.directors,
-                                                            // TODO: controllerObjectMulti: controllerDirector,
-                                                            // Transfer the selected items from long separated by ', ' String - to List<ValueItemGlobal>
-                                                            selectedValue: MainGlobals.getMultiSelectedItemsSeparatedStringToValueItemGlobals(Globals.tableDirectors, this.CurrentMovie.Director),
-                                                            title: 'במאיים',
-                                                            height: 400.0,
-                                                            textDirection: TextDirection.ltr,
-                                                            SelectedItemBackgroundColor: Theme.of(context).colorScheme.primaryContainer, // The Background color of the Selected Item in list
-                                                            SelectedItemForegroundColor: Colors.black,                          // The Foreground color of the Selected Item in list
-                                                            BackgroundColor: Theme.of(context).colorScheme.inversePrimary,      // The Background color of Items in list (Not selected)
-                                                            ItemForegroundColor: Colors.black,                                  // The Foreground color of Items in list (Not selected)
-                                                            onChanged: (List<ValueItemGlobal> selectedItems)
-                                                            {
-                                                              final List<ValueItem<Object?>> items = ValueItemGlobal.fromGlobalToValueItem(selectedItems);
-                                                              controllerDirector.setOptions(items);
-                                                            })),
-
-                                                      const SizedBox(width: 5.0),
-
-                                                      // Add button - Open new page for manage the Subjects
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(bottom: 10.0),
-                                                        child:
-                                                          SizedBox(height: 30.0, width: 30,
-                                                            child:
-                                                              IconButton(
-                                                                color: Theme.of(_context).colorScheme.primary,
-                                                                icon: const Icon(Icons.add, size: 29.0,),
-                                                                iconSize: 30.0,
-                                                                onPressed: () async
-                                                                {
-                                                                  List<String> list = Globals.tableDirectors.map((e) => e['Description'] as String).toList();
-                                                                  List<NoteChild> listToShow = [];
-                                                                  for (int i=0; i<list.length; i++)
-                                                                  {
-                                                                    NoteChild noteChild = NoteChild(NoteID: this.CurrentMovie.MovieID, Title: list[i], IsDone: false, FirebaseID: '');
-                                                                    listToShow.add(noteChild);
-                                                                  }
-                                                                  Object? resultNavigator = await Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                                                      GenericMultiLines(
-                                                                          title: 'במאים',
-                                                                          itemsList: listToShow,
-                                                                          mode: GenericPageModeEn.EmptyLines,
-                                                                          isFullPage: true,
-                                                                          onConfirmEvent: null)));
-                                                                  if (resultNavigator != null)
-                                                                  {
-                                                                    List<String> list = (resultNavigator as List<NoteChild>).map((e) => e.Title).toList();
-                                                                    await dataProvider.saveNewLookupRecords('TBL_Directors', list);
-                                                                    setState(()
-                                                                    {});
-                                                                  }
-                                                                }
-                                                            )
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-
-                                                  // Actors
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    textDirection: TextDirection.ltr,
-                                                    children:
-                                                    [
-                                                      SizedBox(height: 35.0, width: screenWidth-90.0,
-                                                        child:
-                                                          WidgetComboBox(
-                                                            selectionType: ComboBoxType.multi,
-                                                            Items: widget.actors,
-                                                            // TODO: controllerObjectMulti: controllerActors,
-                                                            // Transfer the selected items from long separated by ', ' String - to List<ValueItemGlobal>
-                                                            selectedValue: MainGlobals.getMultiSelectedItemsSeparatedStringToValueItemGlobals(Globals.tableActors, this.CurrentMovie.Actors),
-                                                            title: 'שחקנים',
-                                                            height: 400.0,
-                                                            textDirection: TextDirection.ltr,
-                                                            SelectedItemBackgroundColor: Theme.of(context).colorScheme.primaryContainer, // The Background color of the Selected Item in list
-                                                            SelectedItemForegroundColor: Colors.black,                          // The Foreground color of the Selected Item in list
-                                                            BackgroundColor: Theme.of(context).colorScheme.inversePrimary,      // The Background color of Items in list (Not selected)
-                                                            ItemForegroundColor: Colors.black,                                  // The Foreground color of Items in list (Not selected)
-                                                            onChanged: (List<ValueItemGlobal> selectedItems)
-                                                            {
-                                                              final List<ValueItem<Object?>> items = ValueItemGlobal.fromGlobalToValueItem(selectedItems);
-                                                              controllerActors.setOptions(items);
-                                                            },
-                                                          )),
-
-                                                      const SizedBox(width: 5.0),
-
-                                                      // Add button - Open new page for manage the Subjects
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(bottom: 10.0),
-                                                        child:
-                                                          SizedBox(height: 30.0, width: 30,
-                                                            child:
-                                                             IconButton(
-                                                                color: Theme.of(_context).colorScheme.primary,
-                                                                icon: const Icon(Icons.add, size: 30.0,),
-                                                                iconSize: 30.0,
-                                                                onPressed: () async
-                                                                {
-                                                                  List<String> list = Globals.tableActors.map((e) => e['Description'] as String).toList();
-                                                                  List<NoteChild> listToShow = [];
-                                                                  for (int i=0; i<list.length; i++)
-                                                                  {
-                                                                    NoteChild noteChild = NoteChild(NoteID: this.CurrentMovie.MovieID, Title: list[i], IsDone: false, FirebaseID: '');
-                                                                    listToShow.add(noteChild);
-                                                                  }
-                                                                  Object? resultNavigator = await Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                                                                      GenericMultiLines(
-                                                                          title: 'שחקנים',
-                                                                          itemsList: listToShow,
-                                                                          mode: GenericPageModeEn.EmptyLines,
-                                                                          isFullPage: true,
-                                                                          onConfirmEvent: null)));
-                                                                  if (resultNavigator != null)
-                                                                  {
-                                                                    List<String> list = (resultNavigator as List<NoteChild>).map((e) => e.Title).toList();
-                                                                    await dataProvider.saveNewLookupRecords('TBL_Actors', list);
-                                                                  }
-                                                                }
-                                                            )
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              )
-                                        ),
-
-                                        const SizedBox(height: 15),
-
-                                        // Year, Language fields
-                                        Container(
-                                            padding: const EdgeInsets.only(left: 10.0, top: 5.0, right: 10.0, bottom: 5.0),
+                                            padding: const EdgeInsets.only(left: 5.0, top: 0.3, right: 5.0, bottom: 0.3),
                                             decoration: BoxDecoration(
                                                 color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
                                                 border: Border.all(color: Colors.grey  /*Theme.of(context).colorScheme.secondary*/, width: 0.7),
                                                 borderRadius: const BorderRadius.all(Radius.circular(7.0))),
-                                            height: 130.0,
                                             child:
+                                            TextField(
+                                              controller: controllerTitle,
+                                              textAlign: TextAlign.right,
+                                              textDirection: TextDirection.rtl,    // TODO: maybe to delete, it's parent component haz already value
+                                              keyboardType: TextInputType.text,
+                                              textInputAction: TextInputAction.next,
+                                              autofocus: true,
+                                              showCursor: true,
+                                              autocorrect: false,
+                                              maxLines: 1,
+                                              decoration: InputDecoration(
+                                                fillColor: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.2),
+                                                focusColor: Theme.of(_context).colorScheme.primary,
+                                                border: InputBorder.none,
+                                                hintText: 'הקלד/י כותרת...',
+                                                hintStyle:  MainGlobals.g_styleFieldsCaptions.copyWith(color: Colors.blueGrey),
+                                                labelStyle: MainGlobals.g_styleFieldsCaptions.apply(fontSizeDelta: 1.0),
+                                                // enabledBorder: InputBorder.none,  // const UnderlineInputBorder()
+                                                // focusedBorder: const OutlineInputBorder(gapPadding: 10.0, borderSide: BorderSide(color: Colors.grey, style: BorderStyle.solid)),
+                                                // labelText:   'כותרת (שדה חובה)',
 
-                                              Column(
+                                                //helperText: 'הקלד כותרת ...',
+                                              ),
+                                              style: MainGlobals.styleFieldsText.copyWith(fontSize: 25, decoration: (this.CurrentMovie.StatusID == NoteStatusEn.Completed.value || this.CurrentMovie.StatusID == NoteStatusEn.PartialCompleted.value) ? TextDecoration.lineThrough : TextDecoration.none),
+                                            )),
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 10),
+
+                                    // Description field
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children:
+                                      [
+                                          // Caption
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children:
+                                            [
+                                              Text('תיאור',textAlign: TextAlign.left, style: MainGlobals.g_styleFieldsCaptions),
+                                            ],
+                                          ),
+
+                                          const SizedBox(height: 3.0),
+
+                                          // Description field
+                                          Container(
+                                            padding: const EdgeInsets.only(left: 5.0, top: 3.0, right: 5.0, bottom: 3.0),
+                                            decoration: BoxDecoration(
+                                                color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+                                                border: Border.all(color: Theme.of(context).colorScheme.secondary),
+                                                borderRadius: const BorderRadius.all(Radius.circular(9.0))),
+                                            child:
+                                              TextField(
+                                                controller: controllerDescription,
+                                                keyboardType: TextInputType.multiline,
+                                                decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  hintText: 'הקלד/י הערות נסופות...',
+                                                  hintStyle:  MainGlobals.g_styleFieldsCaptions.copyWith(color: Colors.blueGrey),
+                                                  //labelText: 'Description'
+                                                ),
+                                                style: const TextStyle(fontWeight: FontWeight.normal, fontSize: 18, fontStyle: FontStyle.italic),
+                                                scrollPhysics: const BouncingScrollPhysics(),
+                                                scrollPadding: const EdgeInsets.only(left: 5.0),
+                                                maxLines: 6,
+                                                showCursor: true,
+                                                autocorrect: false,
+                                                //overflow: TextOverflow.ellipsis
+                                                //textInputAction: TextInputAction.newline,
+                                              ),
+                                          //Text(this.CurrentMovie.Description, style: theme.bodyMedium, maxLines: 6),
+                                        ),
+                                      ]),
+
+                                    const SizedBox(height: 15),
+
+                                    // Director, Actors, Writer
+                                    Container(
+                                      padding: const EdgeInsets.only(left: 7.0, top: 7.0, right: 7.0, bottom: 7.0),
+                                      decoration: BoxDecoration(
+                                          color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+                                          border: Border.all(color: Colors.grey  /*Theme.of(context).colorScheme.secondary*/, width: 0.7),
+                                          borderRadius: const BorderRadius.all(Radius.circular(7.0))),
+                                      height: 140.0,
+                                      child:
+
+                                          Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                                            children:
+                                            [
+                                              // Genre, Film Types
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                textDirection: TextDirection.rtl,
+                                                children:
+                                                [
+                                                  SizedBox(height: 35.0, width: screenWidth-90.0,
+                                                    child:
+                                                      WidgetComboBox(
+                                                        selectionType: ComboBoxType.multi,
+                                                        Items: widget.genres,
+                                                        // TODO: controllerObjectMulti: controllerSubjects,
+                                                        // Transfer the selected items from long separated by ', ' String - to List<ValueItemGlobal>
+                                                        selectedValue: MainGlobals.getMultiSelectedItemsSeparatedStringToValueItemGlobals(Globals.tableGenres, this.CurrentMovie.Genre),
+                                                        title: 'ג׳נרים',
+                                                        height: 400.0,
+                                                        textDirection: TextDirection.rtl,
+                                                        SelectedItemBackgroundColor: Theme.of(context).colorScheme.primaryContainer, // The Background color of the Selected Item in list
+                                                        SelectedItemForegroundColor: Colors.black,                          // The Foreground color of the Selected Item in list
+                                                        BackgroundColor: Theme.of(context).colorScheme.inversePrimary,      // The Background color of Items in list (Not selected)
+                                                        ItemForegroundColor: Colors.black,                                  // The Foreground color of Items in list (Not selected)
+                                                        onChanged: (List<ValueItemGlobal> selectedItems)
+                                                        {
+                                                          final List<ValueItem<Object?>> items = ValueItemGlobal.fromGlobalToValueItem(selectedItems);
+                                                          controllerGenre.setOptions(items);
+                                                        },
+                                                      )),
+
+                                                  const SizedBox(width: 5.0),
+
+                                                  // Add button - Open new page for manage the Subjects
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(bottom: 10.0),
+                                                    child:
+                                                      SizedBox(height: 30.0, width: 30,
+                                                        child:
+                                                          IconButton(
+                                                            color: Theme.of(_context).colorScheme.primary,
+                                                            //splashRadius:
+                                                            icon: const Icon(Icons.add, size: 29.0,),
+                                                            iconSize: 30.0,
+                                                            onPressed: () async
+                                                            {
+                                                              List<String> list = Globals.tableGenres.map((e) => e['Description'] as String).toList();
+                                                              List<NoteChild> listToShow = [];
+                                                              for (int i=0; i<list.length; i++)
+                                                              {
+                                                                NoteChild noteChild = NoteChild(NoteID: this.CurrentMovie.MovieID, Title: list[i], IsDone: false, FirebaseID: '');
+                                                                listToShow.add(noteChild);
+                                                              }
+                                                              Object? resultNavigator = await Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                                                  GenericMultiLines(
+                                                                      title: 'ניהול ג׳נרים',
+                                                                      itemsList: listToShow,
+                                                                      mode: GenericPageModeEn.EmptyLines,
+                                                                      isFullPage: true,
+                                                                      onConfirmEvent: null)));
+                                                              if (resultNavigator != null)
+                                                              {
+                                                                List<String> list = (resultNavigator as List<NoteChild>).map((e) => e.Title).toList();
+                                                                await dataProvider.saveNewLookupRecords('TBL_Genres', list);
+                                                                setState(()
+                                                                {});
+                                                              }
+                                                            }
+                                                        )
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+                                              // Directors
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                textDirection: TextDirection.ltr,
+                                                children:
+                                                [
+                                                  SizedBox(height: 35.0, width: screenWidth-90.0,
+                                                    child:
+                                                      WidgetComboBox(
+                                                        selectionType: ComboBoxType.multi,
+                                                        Items: widget.directors,
+                                                        // TODO: controllerObjectMulti: controllerDirector,
+                                                        // Transfer the selected items from long separated by ', ' String - to List<ValueItemGlobal>
+                                                        selectedValue: MainGlobals.getMultiSelectedItemsSeparatedStringToValueItemGlobals(Globals.tableDirectors, this.CurrentMovie.Director),
+                                                        title: 'במאיים',
+                                                        height: 400.0,
+                                                        textDirection: TextDirection.ltr,
+                                                        SelectedItemBackgroundColor: Theme.of(context).colorScheme.primaryContainer, // The Background color of the Selected Item in list
+                                                        SelectedItemForegroundColor: Colors.black,                          // The Foreground color of the Selected Item in list
+                                                        BackgroundColor: Theme.of(context).colorScheme.inversePrimary,      // The Background color of Items in list (Not selected)
+                                                        ItemForegroundColor: Colors.black,                                  // The Foreground color of Items in list (Not selected)
+                                                        onChanged: (List<ValueItemGlobal> selectedItems)
+                                                        {
+                                                          final List<ValueItem<Object?>> items = ValueItemGlobal.fromGlobalToValueItem(selectedItems);
+                                                          controllerDirector.setOptions(items);
+                                                        })),
+
+                                                  const SizedBox(width: 5.0),
+
+                                                  // Add button - Open new page for manage the Subjects
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(bottom: 10.0),
+                                                    child:
+                                                      SizedBox(height: 30.0, width: 30,
+                                                        child:
+                                                          IconButton(
+                                                            color: Theme.of(_context).colorScheme.primary,
+                                                            icon: const Icon(Icons.add, size: 29.0,),
+                                                            iconSize: 30.0,
+                                                            onPressed: () async
+                                                            {
+                                                              List<String> list = Globals.tableDirectors.map((e) => e['Description'] as String).toList();
+                                                              List<NoteChild> listToShow = [];
+                                                              for (int i=0; i<list.length; i++)
+                                                              {
+                                                                NoteChild noteChild = NoteChild(NoteID: this.CurrentMovie.MovieID, Title: list[i], IsDone: false, FirebaseID: '');
+                                                                listToShow.add(noteChild);
+                                                              }
+                                                              Object? resultNavigator = await Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                                                  GenericMultiLines(
+                                                                      title: 'במאים',
+                                                                      itemsList: listToShow,
+                                                                      mode: GenericPageModeEn.EmptyLines,
+                                                                      isFullPage: true,
+                                                                      onConfirmEvent: null)));
+                                                              if (resultNavigator != null)
+                                                              {
+                                                                List<String> list = (resultNavigator as List<NoteChild>).map((e) => e.Title).toList();
+                                                                await dataProvider.saveNewLookupRecords('TBL_Directors', list);
+                                                                setState(()
+                                                                {});
+                                                              }
+                                                            }
+                                                        )
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+                                              // Actors
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                textDirection: TextDirection.ltr,
+                                                children:
+                                                [
+                                                  SizedBox(height: 35.0, width: screenWidth-90.0,
+                                                    child:
+                                                      WidgetComboBox(
+                                                        selectionType: ComboBoxType.multi,
+                                                        Items: widget.actors,
+                                                        // TODO: controllerObjectMulti: controllerActors,
+                                                        // Transfer the selected items from long separated by ', ' String - to List<ValueItemGlobal>
+                                                        selectedValue: MainGlobals.getMultiSelectedItemsSeparatedStringToValueItemGlobals(Globals.tableActors, this.CurrentMovie.Actors),
+                                                        title: 'שחקנים',
+                                                        height: 400.0,
+                                                        textDirection: TextDirection.ltr,
+                                                        SelectedItemBackgroundColor: Theme.of(context).colorScheme.primaryContainer, // The Background color of the Selected Item in list
+                                                        SelectedItemForegroundColor: Colors.black,                          // The Foreground color of the Selected Item in list
+                                                        BackgroundColor: Theme.of(context).colorScheme.inversePrimary,      // The Background color of Items in list (Not selected)
+                                                        ItemForegroundColor: Colors.black,                                  // The Foreground color of Items in list (Not selected)
+                                                        onChanged: (List<ValueItemGlobal> selectedItems)
+                                                        {
+                                                          final List<ValueItem<Object?>> items = ValueItemGlobal.fromGlobalToValueItem(selectedItems);
+                                                          controllerActors.setOptions(items);
+                                                        },
+                                                      )),
+
+                                                  const SizedBox(width: 5.0),
+
+                                                  // Add button - Open new page for manage the Subjects
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(bottom: 10.0),
+                                                    child:
+                                                      SizedBox(height: 30.0, width: 30,
+                                                        child:
+                                                         IconButton(
+                                                            color: Theme.of(_context).colorScheme.primary,
+                                                            icon: const Icon(Icons.add, size: 30.0,),
+                                                            iconSize: 30.0,
+                                                            onPressed: () async
+                                                            {
+                                                              List<String> list = Globals.tableActors.map((e) => e['Description'] as String).toList();
+                                                              List<NoteChild> listToShow = [];
+                                                              for (int i=0; i<list.length; i++)
+                                                              {
+                                                                NoteChild noteChild = NoteChild(NoteID: this.CurrentMovie.MovieID, Title: list[i], IsDone: false, FirebaseID: '');
+                                                                listToShow.add(noteChild);
+                                                              }
+                                                              Object? resultNavigator = await Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                                                                  GenericMultiLines(
+                                                                      title: 'שחקנים',
+                                                                      itemsList: listToShow,
+                                                                      mode: GenericPageModeEn.EmptyLines,
+                                                                      isFullPage: true,
+                                                                      onConfirmEvent: null)));
+                                                              if (resultNavigator != null)
+                                                              {
+                                                                List<String> list = (resultNavigator as List<NoteChild>).map((e) => e.Title).toList();
+                                                                await dataProvider.saveNewLookupRecords('TBL_Actors', list);
+                                                              }
+                                                            }
+                                                        )
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          )
+                                    ),
+
+                                    const SizedBox(height: 15),
+
+                                    // Year, Language fields
+                                    Container(
+                                        padding: const EdgeInsets.only(left: 10.0, top: 5.0, right: 10.0, bottom: 5.0),
+                                        decoration: BoxDecoration(
+                                            color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+                                            border: Border.all(color: Colors.grey  /*Theme.of(context).colorScheme.secondary*/, width: 0.7),
+                                            borderRadius: const BorderRadius.all(Radius.circular(7.0))),
+                                        height: 130.0,
+                                        child:
+
+                                          Column(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children:
+                                            [
+                                              // Writers
+                                              SizedBox(height: 40.0,
+                                                child:
+                                                  TextField(
+                                                      controller: controllerWriter,
+                                                      textDirection: TextDirection.rtl,
+                                                      keyboardType: TextInputType.text,
+                                                      decoration: const InputDecoration(
+                                                          border: UnderlineInputBorder(),
+                                                          labelText: 'תסריט'
+                                                      ),
+                                                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17, color: Colors.blueGrey)   //theme.bodyMedium
+                                                  )),
+
+                                              // Language, Year
+                                              Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children:
                                                 [
-                                                  // Writers
-                                                  SizedBox(height: 40.0,
+                                                  // Year
+                                                  SizedBox(width: 40, height: 60,
                                                     child:
                                                       TextField(
-                                                          controller: controllerWriter,
-                                                          textDirection: TextDirection.rtl,
-                                                          keyboardType: TextInputType.text,
-                                                          decoration: const InputDecoration(
-                                                              border: UnderlineInputBorder(),
-                                                              labelText: 'תסריט'
-                                                          ),
-                                                          style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 17, color: Colors.blueGrey)   //theme.bodyMedium
-                                                      )),
-
-                                                  // Language, Year
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children:
-                                                    [
-                                                      // Year
-                                                      SizedBox(width: 40, height: 60,
-                                                        child:
-                                                          TextField(
-                                                            controller: controllerYear,
-                                                            // maxLength: 4,
-                                                            keyboardType: TextInputType.number,
-                                                            decoration: const InputDecoration(
-                                                              border: UnderlineInputBorder(),
-                                                              labelText: 'שנה',
-                                                            ),
-                                                            style: theme.bodyLarge
-                                                        )),
-
-                                                      // Language
-                                                      SizedBox( height: 40, width: 200,
-                                                        child:
-                                                          TextField(
-                                                            controller: controllerLanguage,
-                                                            keyboardType: TextInputType.text,
-                                                            decoration: const InputDecoration(
-                                                              border: UnderlineInputBorder(),
-                                                              labelText: 'שפה',
-                                                            ),
-                                                            style: theme.bodyLarge
+                                                        controller: controllerYear,
+                                                        // maxLength: 4,
+                                                        keyboardType: TextInputType.number,
+                                                        decoration: const InputDecoration(
+                                                          border: UnderlineInputBorder(),
+                                                          labelText: 'שנה',
                                                         ),
-                                                      ),
-                                                    ],
+                                                        style: theme.bodyLarge
+                                                    )),
+
+                                                  // Language
+                                                  SizedBox( height: 40, width: 200,
+                                                    child:
+                                                      TextField(
+                                                        controller: controllerLanguage,
+                                                        keyboardType: TextInputType.text,
+                                                        decoration: const InputDecoration(
+                                                          border: UnderlineInputBorder(),
+                                                          labelText: 'שפה',
+                                                        ),
+                                                        style: theme.bodyLarge
+                                                    ),
                                                   ),
-                                              ]),
-                                        ),
+                                                ],
+                                              ),
+                                          ]),
+                                    ),
 
-                                  ]),
-                              ])
+                              ]),
+                        ])
 
-                          )
-                      ),
-                    ],),
+                      )
 
+                  ),
+                ],
               )
 
           )
@@ -945,6 +1047,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
 
   }
+
+
 
   /// Open generic page, with rows of TextBoxes & CheckBoxes
   Future<void> openSubTasksScreen() async
@@ -983,8 +1087,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       });
     }
   }
-
-
 
   Future<bool> saveRecord(bool isUpdateMode, int mode) async
   {
