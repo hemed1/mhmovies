@@ -67,14 +67,16 @@ dependencies:
   kat_html_editor: ^0.0.5
   #  quill_html_editor: ^2.2.8
   #  quill_html_editor_v2: ^2.2.10
+  image_picker: ^1.2.1
+  #  image_picker: ^0.8.9
+  #  ^1.1.2  because rich_text
   file_picker: ^8.3.7
-  #  ^10.3.7
-  #  ^8.3.7
   #  ^6.1.1
   #  ^10.3.1
   #  ^8.0.3
   #  ^10.2.0
   #  ^5.2.10
+
 
 
 dev_dependencies:
