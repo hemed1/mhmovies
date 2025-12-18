@@ -241,7 +241,7 @@ class MyHomePage extends StatefulWidget
 }
 
 
-class _MyHomePageState extends State<MyHomePage>   //with WidgetsBindingObserver
+class _MyHomePageState extends State<MyHomePage>   with WidgetsBindingObserver
 {
   int _currentIndex = 0;
   final List<Widget> _screens = [/*const*/ HomePage<Movie>(), const FavoritesPage()];
@@ -253,24 +253,24 @@ class _MyHomePageState extends State<MyHomePage>   //with WidgetsBindingObserver
   void initState()
   {
     super.initState();
-    // WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
   void dispose()
   {
-    // WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
-  // @override
-  // void didChangeMetrics()
-  // {
-  //   // This is called when the screen size changes
-  //   MainGlobals.g_physicalScreenSize = WidgetsBinding.instance.window.physicalSize;
-  //   // print("New physical size: ${MainGlobals.g_physicalScreenSize.width} - ${MainGlobals.g_physicalScreenSize.height}");
-  //   // You would then typically call setState to rebuild the UI if needed
-  // }
+  @override
+  void didChangeMetrics()
+  {
+    // This is called when the screen size changes
+    MainGlobals.g_physicalScreenSize = WidgetsBinding.instance.window.physicalSize;
+    print("New physical size: ${MainGlobals.g_physicalScreenSize.width} , height: ${MainGlobals.g_physicalScreenSize.height}");
+    // You would then typically call setState to rebuild the UI if needed
+  }
 
 
   @override
@@ -370,7 +370,7 @@ class _MyHomePageState extends State<MyHomePage>   //with WidgetsBindingObserver
 
     await this.dataProvider.init('MH_Movies.db', 'TBL_Movies');   // Contained func 'readSettings()'
 
-    await this.dataProvider.readAllRecords(true, true);
+    // await this.dataProvider.readAllRecords(true, true);
 
     await _getApplicationMainColor();
 
